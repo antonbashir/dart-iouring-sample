@@ -1,0 +1,11 @@
+name: iouring_transport_sample
+version: 1.0.0
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  iouring_transport:
+    git: 
+      url: https://github.com/antonbashir/dart-iouring-transport/
+      path: dart
