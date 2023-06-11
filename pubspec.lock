@@ -21,10 +21,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: c372bb384f273f0c2a8aaaa226dad84dc27c8519a691b888725dec59518ad53a
+      sha256: eef6c46b622e0494a36c5a12d10d77fb4e855501a91c1b9ef9339326e58f0596
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.1"
+    version: "2.4.2"
   async:
     dependency: transitive
     description:
@@ -134,7 +134,7 @@ packages:
     description:
       path: dart
       ref: HEAD
-      resolved-ref: "1a8a74a1a2ea6e67c9d04e7b773c177d31c023b7"
+      resolved-ref: "0024bf24671bebb7129a984d8a43d3a4a0163bf1"
       url: "https://github.com/antonbashir/dart-iouring-transport/"
     source: git
     version: "1.0.0"

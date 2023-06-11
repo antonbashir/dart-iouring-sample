@@ -9,6 +9,7 @@ Future<void> main(List<String> args) async {
   await udp();
   await unixStream();
   await unixDatagram();
+  await file();
 }
 
 Future<void> tcp() async {
@@ -96,5 +97,22 @@ Future<void> udp() async {
 
   client.send(Uint8List.fromList("Hello, ".codeUnits));
   await completer.future;
+  await transport.shutdown();
+}
+
+Future<void> file() async {
+  final transport = Transport();
+  final worker = TransportWorker(transport.worker(TransportDefaults.worker()));
+  await worker.initialize();
+
+  final file = worker.files.open('/tmp/my_file', create: true, truncate: true);
+
+  file.writeSingle(Uint8List.fromList("Hello".codeUnits), onDone: () {
+    print("Data written to file.");
+  });
+
+  final data = await file.load();
+  print("Data read from file: " + String.fromCharCodes(data));
+
   await transport.shutdown();
 }
