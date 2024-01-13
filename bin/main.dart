@@ -8,7 +8,6 @@ Future<void> main(List<String> args) async {
   await tcp();
   await udp();
   await unixStream();
-  await unixDatagram();
   await file();
 }
 
@@ -56,35 +55,13 @@ Future<void> unixStream() async {
   await transport.shutdown();
 }
 
-Future<void> unixDatagram() async {
-  final transport = Transport();
-  final worker = TransportWorker(transport.worker(TransportDefaults.worker()));
-  await worker.initialize();
-
-  worker.servers.unixDatagram('/tmp/server').receive().listen((responder) {
-    responder.respond(Uint8List.fromList((String.fromCharCodes(responder.receivedBytes) + "world!").codeUnits));
-  });
-
-  final completer = Completer();
-  final client = await worker.clients.unixDatagram('/tmp/client', '/tmp/server');
-
-  client.stream().listen((event) {
-    print(String.fromCharCodes(event.takeBytes()));
-    completer.complete();
-  });
-
-  client.send(Uint8List.fromList("Hello, ".codeUnits));
-  await completer.future;
-  await transport.shutdown();
-}
-
 Future<void> udp() async {
   final transport = Transport();
   final worker = TransportWorker(transport.worker(TransportDefaults.worker()));
   await worker.initialize();
 
   worker.servers.udp(InternetAddress.anyIPv4, 1234).receive().listen((responder) {
-    responder.respond(Uint8List.fromList((String.fromCharCodes(responder.receivedBytes) + "world!").codeUnits));
+    responder.respondSingle(Uint8List.fromList((String.fromCharCodes(responder.receivedBytes) + "world!").codeUnits));
   });
 
   final completer = Completer();
@@ -95,7 +72,7 @@ Future<void> udp() async {
     completer.complete();
   });
 
-  client.send(Uint8List.fromList("Hello, ".codeUnits));
+  client.sendSingle(Uint8List.fromList("Hello, ".codeUnits));
   await completer.future;
   await transport.shutdown();
 }
